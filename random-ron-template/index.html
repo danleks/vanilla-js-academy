@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Ron</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Random Ron</h1>
+
+		<blockquote aria-live="polite">Getting a quote...</blockquote>
+
+		<p>
+			<button id="get-quote">More Ron</button>
+		</p>
+
+
+		<script>
+			const arr = [];
+            let blockquote = document.querySelector('blockquote');
+            let button = document.querySelector('button');
+
+            function getrandomRon() {
+                fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes')
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+
+                        return response.json().then((json) => thow.json)
+                    })
+                    .then(data => {
+
+						if (arr.length > 50) {
+							arr.shift();
+						}
+
+						if (arr.includes(data[0])) {
+							getrandomRon();
+							return;
+						} 
+
+						arr.push(data[0]);
+						blockquote.textContent = data[0];
+					
+						console.log(arr);
+                    })
+                    .catch(error => console.log(error))
+            };
+
+            window.addEventListener('load', getrandomRon);
+            button.addEventListener('click', getrandomRon);
+
+			// Modify it so that if the same quote gets returned from the API in the last 50 quotes, you skip it and fetch another one instead.
+		</script>
+	</body>
+</html>
