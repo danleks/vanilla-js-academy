@@ -30,20 +30,24 @@
 		<label for="text">Enter your text below.</label>
 		<textarea id="text"></textarea>
 
-		<p>You've written <strong><span id="word-count">0</span> words</strong> and <strong><span id="character-count">0</span> characters</strong>.</p>
+		<p aria-live="polite" aria-atomic="true">You've written <strong><span id="word-count">0</span> words</strong> and <strong><span id="character-count">0</span> characters</strong>.</p>
 
 		<script>
 			const text = document.querySelector("#text");
+			const p = document.querySelector('p');
             let wordCount = document.querySelector('#word-count');
             let charCount = document.querySelector('#character-count');
 
             text.addEventListener('input', (e) => {
                 let chars = e.target.value.split('').length;
                 let words = e.target.value.split(/[\s]+/g).filter(word => word.length).length;
+
+				p.textContent = `You've written ${words} words and ${chars} characters`;
     
                 charCount.textContent = chars;
                 wordCount.textContent = words;
             })
+
 		</script>
 	</body>
 </html>
