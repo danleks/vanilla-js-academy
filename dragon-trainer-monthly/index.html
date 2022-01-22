@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 50px;
+        width: 1000px;
+        margin: auto;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    span {
+        font-size: 12px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+</style>
+<body>
+    <div id="app"></div>
+    <script>
+        // endpoint
+        const ENDPOINT = 'https://vanillajsacademy.com/api/dragons.json';
+        // get app
+        const app = document.querySelector('#app');
+
+        /**
+         * fetch articles from API
+         * @param {String} ENDPOINT endpoint to fetch
+         * 
+         */
+        const getDragons = async (ENDPOINT) => {
+            try {
+                const res = await fetch(ENDPOINT);
+                if (!res.ok) {
+                    throw `Smth went wrong ${res}`;
+                }
+                return await res.json();
+            } catch(e) {
+                console.warn(e);
+                renderFail();
+            }
+           
+        };
+
+         /**
+         * render articles
+         * @param {Array} articles array of articless
+         * 
+         */
+        const render = (articles) => {
+            // if no articles show message and stop func
+            if (!articles || articles.length < 1) {
+                renderFail();
+                return;
+            }
+             // map through an array of articles and add to app
+            app.innerHTML = articles.map(({title, author, article}) => {
+                    return `
+                    <article>
+                        <h2>${title}</h2>
+                        <span>${author}</span>
+                        <p>${article}</p>
+                    </article>
+                    `
+                }).join('');
+        };
+
+        /**
+         * render error message if no articles
+         * 
+         */
+        const renderFail = () => {
+            app.innerHTML = `Failed to get stories`;
+        }
+
+        getDragons(ENDPOINT)
+            .then(data => {
+                render(data.articles)
+            })
+    </script>
+</body>
+</html>
